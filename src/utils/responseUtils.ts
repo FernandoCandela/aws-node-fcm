@@ -38,7 +38,7 @@ export function buildErrorResponse(e: unknown): APIGatewayProxyResult {
     return {
       statusCode: HttpStatus.BAD_REQUEST,
       headers,
-      body: JSON.stringify({ error: `${Messages.INVALID_REQUEST_BODY} "${e.message}"` }),
+      body: JSON.stringify({ error: `${Messages.INVALID_REQUEST_BODY} ${e.message}` }),
     };
   }
 

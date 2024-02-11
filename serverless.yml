@@ -38,10 +38,10 @@ custom:
 
 functions:
   createProduct:
-    handler: src/handlers.createProduct
+    handler: src/presentation/controllers/peopleController.handler
     events:
       - httpApi:
-          path: /product
+          path: /people
           method: post
 
 resources:
