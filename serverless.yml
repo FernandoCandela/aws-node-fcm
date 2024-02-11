@@ -60,9 +60,6 @@ resources:
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
           - IndexName: entityTypeIndex
@@ -71,9 +68,6 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
 
 plugins:
   - serverless-plugin-typescript

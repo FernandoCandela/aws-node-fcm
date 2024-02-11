@@ -22,6 +22,11 @@ export enum Entities {
   PLANETS = "planets",
 }
 
+export enum Origin {
+  SWAPI = "swapi",
+  LOCAL = "local",
+}
+
 export const ErrorMessages = {
   INTERNAL_SERVER_ERROR: {
     message: Messages.INTERNAL_SERVER_ERROR,

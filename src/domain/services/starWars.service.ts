@@ -1,7 +1,7 @@
 import { schema } from "../models/starWars.model";
 import StarWarsRepository from "../../infrastructure/repositories/starWars.repository";
 import { Personas, personasSchema } from "../models/people.model";
-import { Entities } from "../../utils/constants";
+import { Entities, Origin } from "../../utils/constants";
 import { Pelicula, peliculaSchema } from "../models/films.model";
 import { Planeta, planetaSchema } from "../models/planets.model";
 import { Especie, especieSchema } from "../models/species.model";
@@ -13,6 +13,7 @@ const starWarsRepository: StarWarsRepository = new StarWarsRepository();
 export async function saveEntity(entity: any): Promise<any> {
   await validateEntity(entity);
   entity.code = null;
+  entity.origin = Origin.LOCAL;
 
   return await starWarsRepository.createEntity(entity);
 }
