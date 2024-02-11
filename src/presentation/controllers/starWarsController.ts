@@ -13,8 +13,8 @@ export const handlerPost = async (event: APIGatewayProxyEvent): Promise<APIGatew
 };
 export const handlerGet = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
-    const code: string = event.pathParameters?.code as string;
-    const entityType: string = event.pathParameters?.entityType as string;
+    const code: string = event.queryStringParameters?.code as string;
+    const entityType: string = event.queryStringParameters?.entityType as string;
 
     return buildResponse(HttpStatus.OK, await getEntity(entityType, code));
   } catch (e) {
