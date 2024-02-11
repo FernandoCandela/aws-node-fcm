@@ -13,6 +13,15 @@ export enum HttpStatus {
   INTERNAL_SERVER_ERROR = 500,
 }
 
+export enum Entities {
+  PEOPLE = "people",
+  FILMS = "films",
+  STARSHIPS = "starships",
+  VEHICLES = "vehicles",
+  SPECIES = "species",
+  PLANETS = "planets",
+}
+
 export const ErrorMessages = {
   INTERNAL_SERVER_ERROR: {
     message: Messages.INTERNAL_SERVER_ERROR,
