@@ -45,6 +45,19 @@ class Database {
     }
   }
 
+  async listData(): Promise<any> {
+    const params: DynamoDB.DocumentClient.ScanInput = {
+      TableName: this.tableName,
+    };
+
+    try {
+      const { Items } = await this.dynamoDB.scan(params).promise();
+      return Items;
+    } catch (error) {
+      console.error("Error al obtener los elementos de la base de datos:", error);
+      throw error;
+    }
+  }
 }
 
 export default Database;
