@@ -2,6 +2,9 @@ export enum Messages {
   VOID_RESPONSE = "Void response",
   INTERNAL_SERVER_ERROR = "Internal Server Error",
   INVALID_REQUEST_BODY = "Invalid request body format:",
+  REQUIRED_PARAMETERS_ERROR = "Both code and entityType are required.",
+  ENTITY_TYPE_ENUM_ERROR = "entity_type debe ser uno de los siguientes valores: ",
+  ENTITY_TYPE_ENUM_ERROR_1 = "entityType debe ser uno de los siguientes valores: ",
 }
 
 export enum HttpStatus {
@@ -31,5 +34,9 @@ export const ErrorMessages = {
   INTERNAL_SERVER_ERROR: {
     message: Messages.INTERNAL_SERVER_ERROR,
     code: HttpStatus.INTERNAL_SERVER_ERROR,
+  },
+  REQUIRED_PARAMETERS_ERROR: {
+    message: Messages.REQUIRED_PARAMETERS_ERROR,
+    code: HttpStatus.BAD_REQUEST,
   },
 };

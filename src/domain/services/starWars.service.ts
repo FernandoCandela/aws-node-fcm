@@ -1,4 +1,4 @@
-import { schema } from "../models/starWars.model";
+import { getInputSchema, postInputSchema } from "../models/starWars.model";
 import StarWarsRepository from "../../infrastructure/repositories/starWars.repository";
 import { Personas, personasSchema } from "../models/people.model";
 import { Entities, Origin } from "../../utils/constants";
@@ -7,6 +7,7 @@ import { Planeta, planetaSchema } from "../models/planets.model";
 import { Especie, especieSchema } from "../models/species.model";
 import { NaveEstelar, naveEstelarSchema } from "../models/starships.model";
 import { Vehiculo, vehiculoSchema } from "../models/vehicles.model";
+import { getEntityById } from "../../infrastructure/integrations/swapi";
 
 const starWarsRepository: StarWarsRepository = new StarWarsRepository();
 
@@ -18,8 +19,15 @@ export async function saveEntity(entity: any): Promise<any> {
   return await starWarsRepository.createEntity(entity);
 }
 
+export async function getEntity(entityType: string, code: string): Promise<any> {
+  const codeNumber: number = parseInt(code);
+  await getInputSchema.validate({ entityType, codeNumber }, { abortEarly: false });
+
+  return await getEntityById(entityType, codeNumber);
+}
+
 async function validateEntity(entity: any): Promise<void> {
-  await schema.validate(entity, { abortEarly: false });
+  await postInputSchema.validate(entity, { abortEarly: false });
 
   switch (entity.entity_type) {
     case Entities.PEOPLE :

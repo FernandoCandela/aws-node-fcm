@@ -38,11 +38,17 @@ custom:
 
 functions:
   createEntity:
-    handler: src/presentation/controllers/starWarsController.handler
+    handler: src/presentation/controllers/starWarsController.handlerPost
     events:
       - httpApi:
           path: /entity
           method: post
+  getEntity:
+    handler: src/presentation/controllers/starWarsController.handlerGet
+    events:
+      - httpApi:
+          path: /entity
+          method: get
 
 resources:
   Resources:
