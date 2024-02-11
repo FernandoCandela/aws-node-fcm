@@ -19,11 +19,11 @@ export async function saveEntity(entity: any): Promise<any> {
   return await starWarsRepository.createEntity(entity);
 }
 
-export async function getEntity(entityType: string, code: string): Promise<any> {
-  const codeNumber: number = parseInt(code);
-  await getInputSchema.validate({ entityType, codeNumber }, { abortEarly: false });
+export async function getEntity(entityType: string, codeStr: string): Promise<any> {
+  const code: number = parseInt(codeStr);
+  await getInputSchema.validate({ entityType, code }, { abortEarly: false });
 
-  return await getEntityById(entityType, codeNumber);
+  return await getEntityById(entityType, code);
 }
 
 async function validateEntity(entity: any): Promise<void> {
