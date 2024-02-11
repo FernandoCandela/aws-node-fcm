@@ -4,6 +4,8 @@ import AWS from "aws-sdk";
 const docClient = new AWS.DynamoDB.DocumentClient();
 import { v4 } from "uuid";
 import * as yup from "yup";
+import { buildErrorResponse, buildResponse } from "./utils/responseUtils";
+import { HttpStatus } from "./utils/constants";
 
 const tableName: string = process.env.DYNAMODB_TABLE ?? "test";
 
@@ -35,48 +37,10 @@ export const createProduct = async (event: APIGatewayProxyEvent): Promise<APIGat
       })
       .promise();
 
-    return {
-      statusCode: 201,
-      headers,
-      body: JSON.stringify(product),
-    };
+    return  buildResponse(HttpStatus.OK, product);
   } catch (e) {
-    return handleError(e);
+    return buildErrorResponse(e);
   }
 };
 
-const handleError = (e: unknown) => {
-  if (e instanceof yup.ValidationError) {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({
-        errors: e.errors,
-      }),
-    };
-  }
 
-  if (e instanceof SyntaxError) {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({ error: `invalid request body format : "${e.message}"` }),
-    };
-  }
-
-  if (e instanceof HttpError) {
-    return {
-      statusCode: e.statusCode,
-      headers,
-      body: e.message,
-    };
-  }
-
-  throw e;
-};
-
-class HttpError extends Error {
-  constructor(public statusCode: number, body: Record<string, unknown> = {}) {
-    super(JSON.stringify(body));
-  }
-}

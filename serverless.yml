@@ -26,6 +26,16 @@ provider:
           Resource:
             - { "Fn::GetAtt": [ "DynamoDBTable", "Arn" ] }
 
+custom:
+  dynamodb:
+    stages:
+      - ${self:provider.stage}
+    start:
+      docker: true
+      port: 8000
+      inMemory: true
+      migrate: true
+
 functions:
   createProduct:
     handler: src/handlers.createProduct
@@ -50,6 +60,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-
 plugins:
   - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-offline
