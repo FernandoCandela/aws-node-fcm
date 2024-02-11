@@ -64,6 +64,36 @@ class Database {
     }
   }
 
+  async getOneByKeysAndValues(keys: { [key: string]: any }, indexName?: string): Promise<any> {
+    const ExpressionAttributeNames: { [key: string]: string } = {};
+    const ExpressionAttributeValues: { [key: string]: any } = {};
+    let FilterExpression = "";
+
+    Object.keys(keys).forEach((key, index) => {
+      ExpressionAttributeNames[`#${key}`] = key;
+      ExpressionAttributeValues[`:${key}`] = keys[key];
+      if (index > 0) FilterExpression += " AND ";
+      FilterExpression += `#${key} = :${key}`;
+    });
+
+    const params: DynamoDB.DocumentClient.ScanInput = {
+      TableName: this.tableName,
+      IndexName: indexName ?? undefined,
+      FilterExpression,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      Limit: 1,
+    };
+
+    try {
+      const { Items } = await this.dynamoDB.scan(params).promise();
+      return Items ? Items[0] : null;
+    } catch (error) {
+      console.error("Error al obtener el elemento de la base de datos:", error);
+      throw error;
+    }
+  }
+
   async putData(data: any): Promise<any> {
     const element = {
       ...data,

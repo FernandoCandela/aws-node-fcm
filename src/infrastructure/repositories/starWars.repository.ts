@@ -18,9 +18,14 @@ class StarWarsRepository {
     }
   }
 
-  async getEntityByCode(code: string): Promise<any> {
+  async getEntityByEntityTypeAndCode(entityType: string, code: number): Promise<any> {
     try {
-      return await this.database.getOneByKey("code", code);
+      const keysAndValues = {
+        "entity_type": entityType,
+        "code": code,
+      };
+
+      return await this.database.getOneByKeysAndValues(keysAndValues, "entityTypeIndex");
     } catch (error) {
       console.error("Error al obtener el elemento de la base de datos:", error);
       throw error;
