@@ -37,11 +37,11 @@ custom:
       migrate: true
 
 functions:
-  createProduct:
-    handler: src/handlers.createProduct
+  createEntity:
+    handler: src/presentation/controllers/starWarsController.handler
     events:
       - httpApi:
-          path: /product
+          path: /entity
           method: post
 
 resources:
@@ -51,14 +51,23 @@ resources:
       Properties:
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
         AttributeDefinitions:
+          - AttributeName: entity_type
+            AttributeType: S
           - AttributeName: id
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: entity_type
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          - AttributeName: id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: entityTypeIndex
+            KeySchema:
+              - AttributeName: entity_type
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 
 plugins:
   - serverless-plugin-typescript
