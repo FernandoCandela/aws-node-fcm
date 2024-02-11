@@ -32,6 +32,15 @@ class StarWarsRepository {
     }
   }
 
+  async getEntitiesByType(entityType: string): Promise<any> {
+    try {
+      return await this.database.getAllByKey("entity_type", entityType, "entityTypeIndex");
+    } catch (error) {
+      console.error("Error al obtener los elementos de la base de datos:", error);
+      throw error;
+    }
+  }
+
   async createEntity(elemento: any): Promise<any> {
     try {
       return await this.database.putData(elemento);

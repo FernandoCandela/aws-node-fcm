@@ -38,6 +38,15 @@ export async function getEntity(entityType: string, codeStr: string): Promise<an
   return response;
 }
 
+export async function getAllEntities(): Promise<any> {
+  return await starWarsRepository.findAllEntities();
+}
+
+export async function getEntitiesByType(entityType: string): Promise<any> {
+  return await starWarsRepository.getEntitiesByType(entityType);
+
+}
+
 async function translateData(entity: any, entityType: string): Promise<any> {
   switch (entityType) {
     case Entities.PEOPLE :
