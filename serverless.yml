@@ -57,12 +57,12 @@ resources:
       Properties:
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
         AttributeDefinitions:
-          - AttributeName: entity_id
+          - AttributeName: id
             AttributeType: S
           - AttributeName: entity_type
             AttributeType: S
         KeySchema:
-          - AttributeName: entity_id
+          - AttributeName: id
             KeyType: HASH
           - AttributeName: entity_type
             KeyType: RANGE
