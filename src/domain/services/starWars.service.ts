@@ -106,7 +106,7 @@ function translatePeople(people: any): Personas {
     altura: people.height,
     masa: people.mass,
     color_cabello: people.hair_color,
-    color_piel: people.skin,
+    color_piel: people.skin_color,
     color_ojos: people.eye_color,
     anio_nacimiento: people.birth_year,
     genero: people.gender,
