@@ -154,4 +154,73 @@ describe("Star Wars Service", () => {
     expect(getSwapiEntityById).toHaveBeenCalledWith(Entities.PEOPLE, 1);
     expect(StarWarsRepository.prototype.createEntity).toHaveBeenCalledWith(mockEntity);
   });
+
+  it("should throw an error when trying to fetch an unsupported entity type from SWAPI", async () => {
+    const unsupportedEntityType = "UNSUPPORTED";
+
+    await expect(getEntity(unsupportedEntityType, "1")).rejects.toThrow();
+  });
+
+  it("should return null when trying to get an entity by non-existing id", async () => {
+    (StarWarsRepository.prototype.getEntityById as jest.Mock).mockResolvedValue(null);
+
+    const result = await getEntityById("non-existing-id");
+
+    expect(result).toBeNull();
+    expect(StarWarsRepository.prototype.getEntityById).toHaveBeenCalledWith("non-existing-id");
+  });
+
+  it("should return empty array when there are no entities of a given type", async () => {
+    (StarWarsRepository.prototype.getEntitiesByType as jest.Mock).mockResolvedValue([]);
+
+    const result = await getEntitiesByType(Entities.PEOPLE);
+
+    expect(result).toEqual([]);
+    expect(StarWarsRepository.prototype.getEntitiesByType).toHaveBeenCalledWith(Entities.PEOPLE);
+  });
+
+  it("should return empty array when there are no entities at all", async () => {
+    (StarWarsRepository.prototype.findAllEntities as jest.Mock).mockResolvedValue([]);
+
+    const result = await getAllEntities();
+
+    expect(result).toEqual([]);
+    expect(StarWarsRepository.prototype.findAllEntities).toHaveBeenCalled();
+  });
+
+  it("should not fetch from SWAPI when entity is found in the database", async () => {
+    const mockEntity = { entity_type: Entities.PEOPLE, code: 1, entity: entity, origin: Origin.LOCAL };
+    (StarWarsRepository.prototype.getEntityByEntityTypeAndCode as jest.Mock).mockResolvedValue(mockEntity);
+
+    const result = await getEntity(Entities.PEOPLE, "1");
+
+    expect(result).toEqual(mockEntity);
+    expect(getSwapiEntityById).not.toHaveBeenCalled();
+    expect(StarWarsRepository.prototype.createEntity).not.toHaveBeenCalled();
+  });
+
+  it("should throw an error when trying to save an entity with an invalid type", async () => {
+    const mockEntity = { entity_type: "INVALID", code: 1, entity: {} };
+
+    await expect(saveEntity(mockEntity)).rejects.toThrow();
+  });
+
+  it("should throw an error when trying to get an entity with an invalid type", async () => {
+    const invalidEntityType = "INVALID";
+
+    await expect(getEntity(invalidEntityType, "1")).rejects.toThrow();
+  });
+
+  it("should throw an error when trying to save an entity without a code", async () => {
+    const mockEntity = { entity_type: Entities.PEOPLE, entity: {} };
+
+    await expect(saveEntity(mockEntity)).rejects.toThrow();
+  });
+
+  it("should throw an error when trying to save an entity with a non-unique code", async () => {
+    const mockEntity = { entity_type: Entities.PEOPLE, code: 1, entity: {} };
+    (StarWarsRepository.prototype.getEntityByEntityTypeAndCode as jest.Mock).mockResolvedValue(mockEntity);
+
+    await expect(saveEntity(mockEntity)).rejects.toThrow();
+  });
 });
