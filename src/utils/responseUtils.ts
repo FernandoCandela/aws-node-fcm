@@ -24,32 +24,29 @@ export function buildResponse(statusCode: HttpStatus, body: any = null): APIGate
 }
 
 export function buildErrorResponse(e: unknown): APIGatewayProxyResult {
+  let statusCode: HttpStatus;
+  let bodyResponse: string;
+
   if (e instanceof yup.ValidationError) {
-    return {
-      statusCode: HttpStatus.BAD_REQUEST,
-      headers,
-      body: JSON.stringify({
-        errors: e.errors,
-      }),
-    };
+    statusCode = HttpStatus.BAD_REQUEST;
+    bodyResponse = JSON.stringify({ errors: e.errors });
+  } else if (e instanceof SyntaxError) {
+    statusCode = HttpStatus.BAD_REQUEST;
+    bodyResponse = JSON.stringify({ error: `${Messages.INVALID_REQUEST_BODY} ${e.message}` });
+  } else if (e instanceof CustomError) {
+    statusCode = e.code;
+    bodyResponse = JSON.stringify({ error: e.message });
+  } else if (e instanceof Error) {
+    statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+    bodyResponse = e.message;
+  } else {
+    statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+    bodyResponse = Messages.INTERNAL_SERVER_ERROR;
   }
 
-  if (e instanceof SyntaxError) {
-    return {
-      statusCode: HttpStatus.BAD_REQUEST,
-      headers,
-      body: JSON.stringify({ error: `${Messages.INVALID_REQUEST_BODY} "${e.message}"` }),
-    };
-  }
-
-  if (e instanceof CustomError) {
-    let bodyResponse: string = JSON.stringify({ error: e.message });
-    return {
-      statusCode: e.code,
-      headers,
-      body: bodyResponse,
-    };
-  }
-
-  throw e;
+  return {
+    statusCode,
+    headers,
+    body: bodyResponse,
+  };
 }

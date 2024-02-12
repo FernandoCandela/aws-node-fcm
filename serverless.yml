@@ -37,12 +37,18 @@ custom:
       migrate: true
 
 functions:
-  createProduct:
-    handler: src/handlers.createProduct
+  createEntity:
+    handler: src/presentation/controllers/starWarsController.handlerPost
     events:
       - httpApi:
-          path: /product
+          path: /entity
           method: post
+  getEntity:
+    handler: src/presentation/controllers/starWarsController.handlerGet
+    events:
+      - httpApi:
+          path: /entity
+          method: get
 
 resources:
   Resources:
@@ -53,12 +59,21 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: entity_type
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          - AttributeName: entity_type
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: entityTypeIndex
+            KeySchema:
+              - AttributeName: entity_type
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 
 plugins:
   - serverless-plugin-typescript
