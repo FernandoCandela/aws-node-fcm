@@ -132,16 +132,15 @@ Este endpoint almacena la entidad dependiendo del el tipo de entidad elegido.
 ]
 ```
 
-### `POST /entity?entityType=films&code=1&id=8fb267fb-6880-4f28-99b3-37f5755e91fb`
+### `GET /entity?entityType=films&code=1&id=8fb267fb-6880-4f28-99b3-37f5755e91fb`
 
 Este endpoint devuelve una entidad o lista segun los parametros ingresados.
 
 - Si no se ingresan parametros, devuelve todas las entidades guardadas.
 - Si solo se ingresa entityType, se buscará en la BD las entidades de ese tipo.
-- Si solo se ingresa id, se buscará en la BD la entidad con ese id.
+- Si se ingresa id, se buscará en la BD la entidad con ese id.
 - Si se ingresa code y entityType, se buscará en la BD los datos, si estos datos no se encuentran. Esta búsqueda se
-  realizará en la API
-  SWAPI y se almacenará para futuras búsquedas.
+  realizará en la API SWAPI y se almacenará para futuras búsquedas.
 
 **Parámetros:**
 
