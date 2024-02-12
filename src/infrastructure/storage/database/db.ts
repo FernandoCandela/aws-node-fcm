@@ -15,6 +15,7 @@ class Database {
       TableName: this.tableName,
       Key: { id },
     };
+    console.log("params", params);
 
     try {
       const { Item } = await this.dynamoDB.get(params).promise();

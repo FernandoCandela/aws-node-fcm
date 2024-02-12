@@ -57,14 +57,14 @@ resources:
       Properties:
         TableName: ${self:provider.environment.DYNAMODB_TABLE}
         AttributeDefinitions:
-          - AttributeName: entity_type
+          - AttributeName: entity_id
             AttributeType: S
-          - AttributeName: id
+          - AttributeName: entity_type
             AttributeType: S
         KeySchema:
-          - AttributeName: entity_type
+          - AttributeName: entity_id
             KeyType: HASH
-          - AttributeName: id
+          - AttributeName: entity_type
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:

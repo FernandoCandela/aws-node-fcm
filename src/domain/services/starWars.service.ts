@@ -7,7 +7,7 @@ import { Planeta, planetaSchema } from "../models/planets.model";
 import { Especie, especieSchema } from "../models/species.model";
 import { NaveEstelar, naveEstelarSchema } from "../models/starships.model";
 import { Vehiculo, vehiculoSchema } from "../models/vehicles.model";
-import { getEntityById } from "../../infrastructure/integrations/swapi";
+import { getSwapiEntityById } from "../../infrastructure/integrations/swapi";
 
 const starWarsRepository: StarWarsRepository = new StarWarsRepository();
 
@@ -24,7 +24,7 @@ export async function getEntity(entityType: string, codeStr: string): Promise<an
   const response = await starWarsRepository.getEntityByEntityTypeAndCode(entityType, code);
 
   if (!response) {
-    const swapiResponse: any = await getEntityById(entityType, code);
+    const swapiResponse: any = await getSwapiEntityById(entityType, code);
     const translatedData = await translateData(swapiResponse, entityType);
     const entity = {
       entity_type: entityType,
@@ -38,13 +38,16 @@ export async function getEntity(entityType: string, codeStr: string): Promise<an
   return response;
 }
 
+export async function getEntityById(id: string): Promise<any> {
+  return await starWarsRepository.getEntityById(id);
+}
+
 export async function getAllEntities(): Promise<any> {
   return await starWarsRepository.findAllEntities();
 }
 
 export async function getEntitiesByType(entityType: string): Promise<any> {
   return await starWarsRepository.getEntitiesByType(entityType);
-
 }
 
 async function translateData(entity: any, entityType: string): Promise<any> {
