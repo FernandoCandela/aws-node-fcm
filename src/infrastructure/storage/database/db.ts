@@ -10,22 +10,6 @@ class Database {
     this.tableName = tableName;
   }
 
-  async getById(id: string): Promise<any> {
-    const params: DynamoDB.DocumentClient.GetItemInput = {
-      TableName: this.tableName,
-      Key: { id },
-    };
-    console.log("params", params);
-
-    try {
-      const { Item } = await this.dynamoDB.get(params).promise();
-      return Item;
-    } catch (error) {
-      console.error("Error al obtener el elemento de la base de datos:", error);
-      throw error;
-    }
-  }
-
   async getAllByKey(key: string, value: string, indexName?: string): Promise<any> {
     const params: DynamoDB.DocumentClient.ScanInput = {
       TableName: this.tableName,
@@ -44,23 +28,6 @@ class Database {
       return Items;
     } catch (error) {
       console.error("Error al obtener el elemento de la base de datos:", error);
-      throw error;
-    }
-  }
-
-  async getOneByKey(key: string, value: string): Promise<any> {
-    const params: DynamoDB.DocumentClient.GetItemInput = {
-      TableName: this.tableName,
-      Key: {
-        [key]: value,
-      },
-    };
-
-    try {
-      const { Item } = await this.dynamoDB.get(params).promise();
-      return Item;
-    } catch (error) {
-      console.error("Error al obtener elemento de la base de datos por 'key':", error);
       throw error;
     }
   }
